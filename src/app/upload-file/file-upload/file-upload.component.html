@@ -1,0 +1,58 @@
+<div class="card">
+  <div class="card-header">
+    {{ pageTitle }}
+  </div>
+
+  <div class="card-body">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+      </div>
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          id="inputGroupFile01"
+          aria-describedby="inputGroupFileAddon01"
+          accept=".csv"
+          (change)="upload($event)"
+        />
+        <label class="custom-file-label" for="inputGroupFile01"
+          >Choose file</label
+        >
+      </div>
+    </div>
+
+    <div class="container" *ngIf="fruits$ | async as fruits">
+
+      <button type="submit" class="btn btn-primary"(click)="merge(fruits)" style="margin-right: 20px;">Merge</button>
+      <button type="submit" *ngIf="(hasMergeData$ | async ) as hasMergeData" class="btn btn-primary"(click)="update(fruits)"  style="margin-right: 20px;">Update</button>
+      <button type="submit" *ngIf="(hasMergeData$ | async ) as hasMergeData" class="btn btn-primary"(click)="download(fruits)"  >DownLoad</button>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Fruit</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Updated Date</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let fruit of fruits">
+            <tr>
+              <td>{{ fruit.id }}</td>
+              <td>{{ fruit.fruit }}</td>
+              <td *ngIf="!(hasMergeData$ | async )">{{ fruit.price | currency: "GBP":"symbol":"1.2-2" }}</td>
+              <td *ngIf="(hasMergeData$ | async )">
+                <input type="number" [(ngModel)]="fruit.price">
+              </td>
+              <td>{{ fruit.quantity }}</td>
+              <td>{{ fruit.updatedDate | date : "dd/MM/yyyy" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
