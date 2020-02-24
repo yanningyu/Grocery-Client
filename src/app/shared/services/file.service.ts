@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
+interface FileReaderEventTarget extends EventTarget {
+  result:string
+}
+
+interface FileReaderEvent extends ProgressEvent  {
+  target: FileReaderEventTarget;
+}
+
 @Injectable()
 export class FileService {
 
@@ -12,12 +20,12 @@ export class FileService {
     const reader = new FileReader();
     reader.readAsText(file);
 
-    reader.onload = (event) => {
-      if (event.target.result !== undefined) {
+    reader.onload = (event: FileReaderEvent) => {
+      if (event.target !== undefined) {
         const csv = event.target.result; // Content of CSV file
         this.extractData(csv); //Here you can call the above function.
       }
-    }
+    };
   }
 
   downLoadFile = (data: any) => {
@@ -57,6 +65,6 @@ export class FileService {
     }
 
     this.dataSubject.next(lines);
-    console.log(lines); //The data in the form of 2 dimensional array.
+    console.log(lines);
   }
 }

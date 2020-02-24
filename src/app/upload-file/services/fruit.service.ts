@@ -32,6 +32,19 @@ constructor(
     );
   }
 
+  update = (fruits: IFruit[]): Observable<IFruit[]> => {
+    const url = `${environment.groceryAPI}/api/fruit`;
+    const request = {} as any;
+    request.fruits = fruits;
+    return this.httpClient.put<IFruit[]>(url, request).pipe(
+      map((fruitsTemp: IFruit[]) => {
+        fruitsTemp = _.sortBy(fruitsTemp, 'updatedDate');
+        this.fruitSubject.next(fruitsTemp);
+        return fruitsTemp;
+      }),
+      catchError(this.handleError )
+    );
+  }
   private handleError(err: any) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console

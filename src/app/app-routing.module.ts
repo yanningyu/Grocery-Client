@@ -9,7 +9,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },
       {
-        path: 'upload',
+        path: 'admin',
         loadChildren: () =>
           import('./upload-file/upload-file.module').then(m => m.UploadFileModule)
       },

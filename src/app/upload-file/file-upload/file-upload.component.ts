@@ -19,12 +19,11 @@ export class FileUploadComponent implements OnInit {
     private fileService: FileService,
     private fruitService: FruitService
   ) { }
-  private fruitSubject = new Subject<IFruit[]>();
-  fruits$ = this.fruitSubject as Observable<IFruit[]>;
+
+  fruits$ = new Observable<IFruit[]>();
   pageTitle = 'Upload Fruit';
 
-  private hasMergeDataSubject = new Subject<boolean>();
-  hasMergeData$ = this.hasMergeDataSubject as Observable<boolean>;
+  hasMergeData$ = new Observable<boolean>();
   ngOnInit() {
 
   }
@@ -52,13 +51,14 @@ export class FileUploadComponent implements OnInit {
 
   }
   update = (fruits: IFruit[]) => {
-
+    this.fruits$ = this.fruitService.update(fruits);
+    this.hasMergeData$ = of(true);
   }
 
   download = (fruits: IFruit[]) => {
     const downloadFruits: IDownloadFruit[] = [];
     fruits.forEach((fruit: IFruit) => {
-      let model: IDownloadFruit = {} as any;
+      const model: IDownloadFruit = {} as any;
       model.fruit = fruit.fruit;
       model.price = fruit.price;
       model.quantity = fruit.quantity;
